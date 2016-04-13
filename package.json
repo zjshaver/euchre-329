@@ -1,0 +1,24 @@
+{
+  "name": "euchre-329",
+  "version": "1.0.0",
+  "description": "Multiplayer networked euchre implementation using Nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zjshaver/euchre-329.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  },
+  "bugs": {
+    "url": "https://github.com/zjshaver/euchre-329/issues"
+  },
+  "homepage": "https://github.com/zjshaver/euchre-329#readme"
+}

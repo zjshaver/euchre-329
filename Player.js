@@ -1,9 +1,9 @@
 var Player = function (playerId) {
-    var id = playerId
-        , team = (playerId % 2) + 1
-        , cards = []
-        , numberOfCards = 0
-        , tricks = 0;
+  var id = playerId
+    , team = (playerId % 2);
+    , cards = []
+    , numberOfCards = 0
+    , tricks = 0;
 
     // Getters and setters
     var getId = function () {

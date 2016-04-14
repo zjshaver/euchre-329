@@ -108,7 +108,6 @@ function joinRequest(data) {
       playing: true
       , id: game.getCount()
       , playerNum: game.getNumPlayers()
-      // TODO: Add new fields needed for this joinReq
     });
 
     this.gameName = data.name;

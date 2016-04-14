@@ -1,25 +1,15 @@
 angular.module('myApp')
 
-.controller('GameCtrl', function ($scope, $location, gameData, mapData) {
+.controller('GameCtrl', function ($scope, $location, gameData) {
 
   angular.element(document).ready(function () {
     var socket = io.connect();
 
-    var mapInfo = {};
     var gameInfo = {};
 
-    var offenseMap = L.map('offenseMap').setView([38, -100], 4);
-
-    var defenseMap = L.map('defenseMap').setView([38, -100], 4);
-
-    var searchRadius = 0; //(In meters) set when game info is loaded  
-
-    var mymarkers = [];
-    var mycoordinates = [];
     $scope.stats = [];
     var gameName = "";
 
-    var placedTokens = 0;
     var playerId = -1;
     $scope.status = {
       waiting: false
@@ -29,24 +19,15 @@ angular.module('myApp')
     $scope.won = -1;
     $scope.gameFull = false;
     $scope.ready = false;
-    $scope.precision = 100;
     $scope.leavingPlayer = -1;
 
-    var turn = -1; //-1-set markers, otherwise matches playerId's turn
+    var turn = -1;
 
     //if game wasn't created or joined go to game menu
     if (gameData.getJoinName() == "" && !gameData.isCreated()) {
       $location.path('/');
     } else if (gameData.isCreated()) {
       gameInfo = gameData.getInfo();
-      if (gameInfo.map == "USA") {
-        mapInfo = mapData.getUSA();
-      } else if (gameInfo.map == "Ames") {
-        mapInfo = mapData.getAmes();
-      } else {
-        mapInfo = mapData.getCustom();
-        console.log(mapInfo);
-      }
       gameName = gameInfo.createName;
 
       //create game
@@ -54,11 +35,6 @@ angular.module('myApp')
         info: gameInfo
         , map: mapInfo
       });
-
-
-      $scope.precision = gameInfo.precision;
-
-      setupMap();
 
     } else {
       gameName = gameData.getJoinName();
@@ -69,63 +45,6 @@ angular.module('myApp')
       });
 
     }
-
-    defenseMap.on('click', function (e) {
-      if (playerId < gameInfo.numberOfPlayers) {
-        if ((turn == -1) && (placedTokens < gameInfo.numberOfTokens)) {
-          var m = L.marker(e.latlng, {
-            icon: L.icon({
-              iconUrl: 'img/marker-yellow.png'
-              , iconSize: [25, 41], // size of the icon
-              iconAnchor: [12, 40], // point of the icon which will correspond to marker's location
-              popupAnchor: [12, 1]
-            })
-          });
-          m.addTo(defenseMap);
-          m.dragging.enable();
-          m.on('dragstart', function (event) {
-            var m = event.target;
-            var position = m.getLatLng();
-            var index = mycoordinates.indexOf(position);
-            mycoordinates.splice(index, 1);
-          });
-          m.on('dragend', function (event) {
-            var m = event.target;
-            var position = m.getLatLng();
-            m.setLatLng([position.lat, position.lng], {
-              draggable: 'true'
-            }).bindPopup(position).update();
-            mymarkers.pop();
-            mymarkers.push(m);
-            mycoordinates.push(m.getLatLng());
-            m.addTo(defenseMap);
-          });
-          mymarkers.push(m);
-          mycoordinates.push(m.getLatLng());
-          placedTokens++;
-        }
-      } else {
-        console.log("Can't place token! You are not a member of this game...");
-      }
-    });
-
-    offenseMap.on('click', function (e) {
-      if (playerId < gameInfo.numberOfPlayers) {
-        if (turn == playerId) {
-          console.log("guessing");
-          //      alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-          socket.emit('guess', {
-            id: playerId
-            , latlng: e.latlng
-            , name: gameName
-          });
-        } else {
-          console.log("Not your turn. Back off!")
-        }
-      } else {
-        console.log("Can't place guess! You are not a member of this game...");
-      }
-    });
 
     $scope.playerReady = function () {
       console.log("ready click");
@@ -171,13 +90,8 @@ angular.module('myApp')
       } else if (data.playing) {
         console.log("playing");
         playerId = data.id;
-        gameInfo.numberOfTokens = data.tokenNum;
         gameInfo.numberOfPlayers = data.playerNum;
-        gameInfo.precision = data.precision;
-        $scope.precision = data.precision;
-        mapInfo = data.map;
         console.log(data);
-        setupMap();
       } else {
         playerId = -1;
         $scope.gameFull = true;

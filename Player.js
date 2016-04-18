@@ -41,7 +41,6 @@ var Player = function (playerId) {
     return {
         getId: getId
         , getTeam: getTeam
-        , getLost: getLost
         , receiveCard: receiveCard
         , playCard: playCard
         , getNumCards: getNumCards

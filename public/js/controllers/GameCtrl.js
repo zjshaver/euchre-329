@@ -45,16 +45,6 @@ angular.module('myApp')
 
     }
 
-    $scope.playerReady = function () {
-      console.log("ready click");
-        socket.emit('ready', {
-          id: playerId
-          , name: gameName
-        });
-
-        $scope.ready = true;
-    }
-
     $scope.playAgain = function () {
       console.log("playing again");
       $location.path('/');

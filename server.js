@@ -46,11 +46,11 @@ function onSocketConnection(socket) {
   socket.on('createGame', createGame);
 
   socket.on('joinReq', joinRequest);
-  
+
   //socket.on('ready', playerReady);
 
   // Not sure if we want this to handle play of all 5 cards in hand or make method handle for each 4 cards played (1 by each player)
-  socket.on('playHand', guess);
+  //socket.on('playHand', guess);
 
   socket.on('disconnect', disconnect);
 

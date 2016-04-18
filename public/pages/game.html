@@ -3,45 +3,6 @@
   <h3 id="whosTurn" align="center" style="color:green"></h3>
   <h3 id="gameEnd" align="center" style="color:blue"></h3>
   <h3 id="gameFull" align="center" style="color:red"></h3>
-    
-    
-  <div class="container">
-    <div class="row">
-      <div id="map2" class="col-sm-12 col-md-12 col-lg-6">
-        <h3 class="">Defensive Map</h3>
-        <div id="defenseMap" ng-class="{'active-defense' : !ready || (yourturn != -1 && !yourturn)}" style="height: 400px;"></div>
-      </div>
-      <div id="map1" class="col-sm-12 col-md-12 col-lg-6">
-        <h3 class="">Offensive Map</h3>
-        <div id="offenseMap" ng-class="{'active-offense' : yourturn != -1 && yourturn}" style="height: 400px; margin-bottom: 5px;"></div>
-        <p>Search radius: {{ precision }} mile(s)</p>
-      </div>
-    </div>
-    <br>
-    <br>
-  
-    <div ng-show="status.waitingOn == 0" class="" align="center">
-      <h3>Scoreboard</h3>
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Found</th>
-            <th>Lost</th>
-            <th>Guesses</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="player in stats">
-            <td>player{{player.id}}</td>
-            <td>{{player.found}}</td>
-            <td>{{player.lost}}</td>
-            <td>{{player.guesses}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 
 </div>
 
@@ -58,9 +19,7 @@
             <button id="again_btn" class="btn btn-primary navbar-btn status-btn-right" ng-hide="won == -1" ng-click="playAgain()">Play Again?</button>
         </div>
         <div class="instructions">
-            <p class="navbar-text" ng-show="!ready">Click on the Defensive Map to place your tokens, then click Ready.</p>
-            <p class="navbar-text" ng-show="won == -1 && yourturn != -1 && yourturn">Click on the Offensive Map and try to find other players tokens.</p>
-            <p class="navbar-text" ng-show="won == -1 && yourturn != -1 && !yourturn">Wait for them to go.</p>
+            <!--NEED TO IMPLEMENT INSTRUCTIONS -->
         </div>
     </div>
 </div>

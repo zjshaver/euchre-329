@@ -19,9 +19,6 @@ angular.module('myApp')
         });
 
 
-    $scope.vis = true;
-  }
-
   $scope.getGameOptions = function(){
     $http.get('/options')
         .success(function(data) {
@@ -40,7 +37,6 @@ angular.module('myApp')
 
   $scope.createGame = function () {
     gameData.setInfo($scope.createData);
-    mapData.setCustom(customMap);
     $location.path( '/game' );
   }
 

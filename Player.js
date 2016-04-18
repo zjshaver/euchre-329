@@ -1,6 +1,6 @@
 var Player = function (playerId) {
   var id = playerId
-    , team = (playerId % 2);
+    , team = (playerId % 2)
     , cards = []
     , numberOfCards = 0
     , tricks = 0;

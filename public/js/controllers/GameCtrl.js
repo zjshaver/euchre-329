@@ -57,6 +57,10 @@ angular.module('myApp')
         if (data.status) {
           console.log("successfully created game");
           playerId = 0;
+          socket.emit("ready", {
+            name:gameName,
+            id: playerId
+          });
           //gameInfo should already be set, just needed playerID
         } else {
           console.log("failed to create game");
@@ -71,6 +75,10 @@ angular.module('myApp')
         playerId = data.id;
         gameInfo.numberOfPlayers = data.playerNum;
         console.log(data);
+        socket.emit("ready", {
+          name: gameName,
+          id: playerId
+        });
       } else {
         playerId = -1;
         $scope.gameFull = true;
@@ -86,6 +94,11 @@ angular.module('myApp')
         turn = data.turn;
         if (turn == playerId) {
           $scope.yourturn = true;
+          if(data.bidRound == 0){
+            console.log("bidding");
+          }else{
+            console.log("playing");
+          }
         } else {
           $scope.yourturn = false;
         }

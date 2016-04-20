@@ -13,8 +13,6 @@ server.listen(8080);
 app.use(express.static(__dirname + '/public'));
 console.log("Server running on 127.0.0.1:8080");
 
-var gameCount = 0;
-var gameLimit = 10;
 var games = [];
 
 //REST API
@@ -50,6 +48,8 @@ function onSocketConnection(socket) {
   // Not sure if we want this to handle play of all 5 cards in hand or make method handle for each 4 cards played (1 by each player)
   //socket.on('playHand', guess);
 
+  socket.on("ready", playerReady);
+
   socket.on('disconnect', disconnect);
 
   socket.on('game_end', game_end);
@@ -70,7 +70,7 @@ function createGame(data) {
     }
   }
 
-  if (gameCount <= gameLimit && !nameTaken) {
+  if (!nameTaken) {
 
     var newGame = new Game(data.info.createName, 4);
 
@@ -120,8 +120,10 @@ function joinRequest(data) {
   }
 }
 
+
+
 // TODO: Decide if we need a ready function and if so uncomment line 50
-/*function playerReady(data) {
+function playerReady(data) {
   game = games[data.name];
   console.log(data);
   //check if valid game name
@@ -130,32 +132,44 @@ function joinRequest(data) {
   }
 
   if (data.id < game.getNumPlayers()) {
-    waitingOn = game.incReady();
-    if (waitingOn == 0) {
+    numPlayers = game.getPlayerCount();
+    if (numPlayers == 4) {
+      var hands = [];
+      for(var i = 0; i < 4; i++){
+        hands.push(game.dealHand());
+      }
+      var fc = game.getFlipped();
       this.broadcast.emit('turn', {
-        name: data.name
-        , turn: 0
+        name: game.getName(),
+        turn: game.getTurn(),
+        bidRound: game.getBidRound(),
+        hands: hands,
+        flippedCard = fc;
       });
+
       this.emit('turn', {
-        name: data.name
-        , turn: 0
+        name: game.getName(),
+        turn: game.getTurn(),
+        bidRound: game.getBidRound(),
+        hands: hands,
+        flippedCard: fc
       });
     }
     this.broadcast.emit('waiting', {
       name: data.name
-      , num: waitingOn
+      , num: 4-numPlayers
       , player: data.id
     });
     this.emit('waiting', {
       name: data.name
-      , num: waitingOn
+      , num: 4-numPlayers
       , player: data.id
     });
   } else {
     console.log("Invalid player with ID: " + data.id + " tried to click ready button");
   }
 }
-*/
+
 
 function disconnect(data) {
   console.log("player disconnected");
@@ -168,7 +182,6 @@ function disconnect(data) {
 
 function game_end(data) {
   delete games[data.name];
-  gameCount--;
 }
 
 // TODO: Implement some sort of playHand or playCard function. See lines 52 and 53

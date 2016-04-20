@@ -144,7 +144,7 @@ function playerReady(data) {
         turn: game.getTurn(),
         bidRound: game.getBidRound(),
         hands: hands,
-        flippedCard = fc;
+        flippedCard: fc
       });
 
       this.emit('turn', {

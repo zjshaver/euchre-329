@@ -6,6 +6,7 @@ angular.module('myApp')
     var socket = io.connect();
 
     var gameInfo = {};
+    var hand = [];
 
     $scope.stats = [];
     var gameName = "";
@@ -95,9 +96,16 @@ angular.module('myApp')
         if (turn == playerId) {
           $scope.yourturn = true;
           if(data.bidRound == 0){
-            console.log("bidding");
+            console.log(data.hands);
+            hand = [];
+            for(var i = 0; i < data.hands[playerId].length; i++){
+              hand.push($.extend(new playingCards.card(), data.hands[playerId][i]));
+            }
+            console.log(hand);
+            showHand(hand);
           }else{
             console.log("playing");
+            showHand(data.hands[playerId]);
           }
         } else {
           $scope.yourturn = false;
@@ -126,5 +134,14 @@ angular.module('myApp')
         });
       }
     });
+
+    var showHand = function(hand) {
+      var e1 = $('#yourHand');
+      e1.html('');
+      for(var i=0;i<hand.length;i++){
+        console.log(hand[i]);
+        e1.append(hand[i].getHTML());
+      }
+    };
   });
 });

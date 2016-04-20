@@ -93,19 +93,22 @@ angular.module('myApp')
       if (data.name == gameName) {
         console.log("turn " + data.turn + " id " + playerId);
         turn = data.turn;
+
+        // Display hand
+        console.log(data.hands);
+        hand = [];
+        for(var i = 0; i < data.hands[playerId].length; i++){
+          hand.push($.extend(new playingCards.card(), data.hands[playerId][i]));
+        }
+        console.log(hand);
+        showHand(hand);
+
         if (turn == playerId) {
           $scope.yourturn = true;
           if(data.bidRound == 0){
-            console.log(data.hands);
-            hand = [];
-            for(var i = 0; i < data.hands[playerId].length; i++){
-              hand.push($.extend(new playingCards.card(), data.hands[playerId][i]));
-            }
-            console.log(hand);
-            showHand(hand);
+            console.log("bidding");
           }else{
-            console.log("playing");
-            showHand(data.hands[playerId]);
+            console.log("playing hand");
           }
         } else {
           $scope.yourturn = false;

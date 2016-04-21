@@ -6,7 +6,7 @@ var Game = function (gameName, numPlayers) {
     , players = []
     , numOfPlayers = numPlayers
     , full = false
-    , turn = 0
+    , turn = 1
     , trump = "none"
     , trumpSetBy = 0
     , team1Score = 0
@@ -17,7 +17,10 @@ var Game = function (gameName, numPlayers) {
     , bidRound = 0
     , cardsPlayed = []
     , tricks = 0
-    , playerLed = 0;
+    , playerLed = 0
+    , dealer = 0
+    , hands = []
+    , fc = null;
   
   // Getters and setters  
   var getNumPlayers = function() {
@@ -91,17 +94,64 @@ var Game = function (gameName, numPlayers) {
       return bidRound;
      };
 
-  var dealHand = function() {
-      var hand = [];
-      for(var i = 0; i < 5; i++){
-        hand.push(deck.draw());
+  var dealHands = function() {
+      for(var i = 0; i < 4; i++){
+        var hand = [];
+        for(var j = 0; i < 5; j++){
+          hand.push(deck.draw());
+        }
+        hands.push(hand);
       }
-      return hand;
+    };
+  
+  var getHands = function() {
+      return hands;
     };
 
-  var getFlipped = function() {
-      return deck.draw();
+  var flipCard = function(){
+      fc = deck.draw();
     };
+  
+  var getFlipped = function() {
+      return fc;
+    };
+
+  var getDealer = function() {
+      return dealer;
+    };
+  
+  var incDealer = function() {
+      dealer = (dealer+1) % 4;
+    };
+
+  var setRound = function(var r) {
+      bidRound = r;
+    };
+
+  var setTurn = function(var t) {
+      turn = t;
+    };
+
+  var getCardLed = function() {
+      return cardLed;
+    };
+
+  var setCardLed = function(var c) {
+      cardLed = c;
+    };
+
+  var getCardsPlayed = function() {
+      return cardsPlayed;
+    };
+
+  var cardPlayed = function(var c) {
+      cardsPlayed.push(c);
+    };
+
+  var clearCardsPlayed = function() {
+      cardsPlayed = [];
+    };
+  
   
 
   // Define which variables and methods can be accessed
@@ -123,14 +173,19 @@ var Game = function (gameName, numPlayers) {
     , team1Scores: team1Scores
     , team2Scores: team2Scores
     , getPlayerCount: getPlayerCount
-    , cardLed: cardLed
+    , getCardLed: getCardLed
     , deck: deck
     , getBidRound: getBidRound
-    , cardsPlayed: cardsPlayed
+    , getCardsPlayed: getCardsPlayed
     , tricks: tricks
     , playerLed: playerLed
     , dealHand: dealHand
     , getFlipped: getFlipped
+    , getDealer: getDealer
+    , setRound: setRound
+    , setTurn: setTurn
+    , cardPlayed: cardPlayed
+    , clearCardsPlayed: clearCardsPlayed
   }
 };
 

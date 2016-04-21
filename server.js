@@ -3,7 +3,8 @@ var express = require('express')
   , http = require('http')
   , socketIo = require('socket.io')
   , Player = require('./Player').Player
-  , Game = require('./Game').Game;
+  , Game = require('./Game').Game
+  , cardLib = require('./public/js/lib/playingCards/playingCards.js');
 
 // start webserver on port 8080
 var server = http.createServer(app);
@@ -14,6 +15,7 @@ app.use(express.static(__dirname + '/public'));
 console.log("Server running on 127.0.0.1:8080");
 
 var games = [];
+
 
 //REST API
 app.get('/options', function (req, res) {
@@ -45,8 +47,7 @@ function onSocketConnection(socket) {
 
   socket.on('joinReq', joinRequest);
 
-  // Not sure if we want this to handle play of all 5 cards in hand or make method handle for each 4 cards played (1 by each player)
-  //socket.on('playHand', guess);
+  socket.on('turn', turn);
 
   socket.on("ready", playerReady);
 
@@ -134,25 +135,23 @@ function playerReady(data) {
   if (data.id < game.getNumPlayers()) {
     numPlayers = game.getPlayerCount();
     if (numPlayers == 4) {
-      var hands = [];
-      for(var i = 0; i < 4; i++){
-        hands.push(game.dealHand());
-      }
-      var fc = game.getFlipped();
+      game.dealHands();
+      game.flipCard();
+
       this.broadcast.emit('turn', {
         name: game.getName(),
         turn: game.getTurn(),
         bidRound: game.getBidRound(),
-        hands: hands,
-        flippedCard: fc
+        hands: game.getHands(),
+        flippedCard: game.getFlipped()
       });
 
       this.emit('turn', {
         name: game.getName(),
         turn: game.getTurn(),
         bidRound: game.getBidRound(),
-        hands: hands,
-        flippedCard: fc
+        hands: game.getHands(),
+        flippedCard: game.getFlipped()
       });
     }
     this.broadcast.emit('waiting', {
@@ -170,6 +169,57 @@ function playerReady(data) {
   }
 }
 
+function turn(data){
+  game = games[data.name];
+  if(data.round == 0){
+    if(data.order == true){
+      game.setTrump(game.getFlipped().suitString, data.playerId%2);
+      game.setRound(1);
+      game.setTurn(game.getDealer());
+    }else{
+      if(game.getTurn()%4 == game.getDealer()){
+        //dealer passed the deal
+        game.incDealer();
+        game.dealHands();
+        game.flipCard();
+        game.nextTurn();
+      }else{
+        //Pass and not dealer -- do nothing
+      }
+    }
+  } else if(data.round == 1){
+    game.playCard(data.cardPlayed);
+    if(game.getCardsPlayed().length == 1){
+      game.setCardLed(data.cardPlayed);
+    }
+    if(game.getCardsPlayed().length == 4){
+      var cardsPlayed = game.getCardsPlayed();
+      var topCard = cardsPlayed[0];
+      for(var i = 1; i < 4; i++){
+        topCard = compareCard(topCard, cardsPlayed[i], game);
+      }
+      console.log(topCard);
+      //find owner of top card
+    }
+  } else {
+
+  }
+  game.nextTurn();
+  this.broadcast.emit('turn', {
+    name: game.getName(),
+    turn: game.getTurn(),
+    bidRound: game.getBidRound(),
+    hands: game.getHands(),
+    flippedCard: game.getFlipped()
+  });
+  this.emit('turn', {
+    name: game.getName(),
+    turn: game.getTurn(),
+    bidRound: game.getBidRound(),
+    hands: game.getHands(),
+    flippedCard: game.getFlipped()
+  });
+}
 
 function disconnect(data) {
   console.log("player disconnected");
@@ -184,6 +234,217 @@ function game_end(data) {
   delete games[data.name];
 }
 
-// TODO: Implement some sort of playHand or playCard function. See lines 52 and 53
+function compareCard(var top, var compareTo, var game){
+  //return the highest value of the two cards
+  switch(game.getTrump())
+  case "S":
+    if(top.suit == "S" || (top.rank == "J" && top.suit == "C")){
+      if(compareTo == "S" || (compareTo.rank == "J" && compareTo.suit == "C")){
+        if((top.rank == "J" && top.suit == "S")){
+          //top is right bower
+          return top;
+        }else if((top.rank == "J" && top.suit == "C")) {
+          if((compareTo.rank == "J" && compareTo.suit == "S")){
+            //top is left bower other is right bower
+            return compareTo;
+          }else{
+            //top is left bower other is not right bower
+            return top;
+          }
+        }else{
+          if(compareTo.rank == "J"){
+            //top is trump but not a bower other is a bower
+            return compareTo;
+          }else{
+            if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+              //both are trump neither are bowers and top is bigger
+              return top;
+            }else{
+              //both are trump neither are bowers and other is bigger
+              return compareTo;
+            }
+          }
+        }
+      }else{
+        //top is trump other is not
+        return top;
+      }
+    }else{
+      if(compareTo == "S" || (compareTo.rank == "J" && compareTo.suit == "C")){
+        //other is trump top is not
+        return compareTo;
+      }else{
+        if(compareTo.suit == top.suit){
+          if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+            //neither are trump and top is bigger
+            return top;
+          }else{
+            //neither are trump and other is bigger
+            return compareTo;
+          }
+        }else{
+          //neither are trump and other didn't follow suit
+          return top;
+        }
+      }
+    }
+    break;
+  case "D":
+    if(top.suit == "D" || (top.rank == "J" && top.suit == "H")){
+      if(compareTo == "D" || (compareTo.rank == "J" && compareTo.suit == "H")){
+        if((top.rank == "J" && top.suit == "D")){
+          //top is right bower
+          return top;
+        }else if((top.rank == "J" && top.suit == "H")) {
+          if((compareTo.rank == "J" && compareTo.suit == "D")){
+            //top is left bower other is right bower
+            return compareTo;
+          }else{
+            //top is left bower other is not right bower
+            return top;
+          }
+        }else{
+          if(compareTo.rank == "J"){
+            //top is trump but not a bower other is a bower
+            return compareTo;
+          }else{
+            if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+              //both are trump neither are bowers and top is bigger
+              return top;
+            }else{
+              //both are trump neither are bowers and other is bigger
+              return compareTo;
+            }
+          }
+        }
+      }else{
+        //top is trump other is not
+        return top;
+      }
+    }else{
+      if(compareTo == "D" || (compareTo.rank == "J" && compareTo.suit == "H")){
+        //other is trump top is not
+        return compareTo;
+      }else{
+        if(compareTo.suit == top.suit){
+          if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+            //neither are trump and top is bigger
+            return top;
+          }else{
+            //neither are trump and other is bigger
+            return compareTo;
+          }
+        }else{
+          //neither are trump and other didn't follow suit
+          return top;
+        }
+      }
+    }
+    break;
+  case "H":
+    if(top.suit == "H" || (top.rank == "J" && top.suit == "D")){
+      if(compareTo == "H" || (compareTo.rank == "J" && compareTo.suit == "D")){
+        if((top.rank == "J" && top.suit == "H")){
+          //top is right bower
+          return top;
+        }else if((top.rank == "J" && top.suit == "D")) {
+          if((compareTo.rank == "J" && compareTo.suit == "H")){
+            //top is left bower other is right bower
+            return compareTo;
+          }else{
+            //top is left bower other is not right bower
+            return top;
+          }
+        }else{
+          if(compareTo.rank == "J"){
+            //top is trump but not a bower other is a bower
+            return compareTo;
+          }else{
+            if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+              //both are trump neither are bowers and top is bigger
+              return top;
+            }else{
+              //both are trump neither are bowers and other is bigger
+              return compareTo;
+            }
+          }
+        }
+      }else{
+        //top is trump other is not
+        return top;
+      }
+    }else{
+      if(compareTo == "H" || (compareTo.rank == "J" && compareTo.suit == "D")){
+        //other is trump top is not
+        return compareTo;
+      }else{
+        if(compareTo.suit == top.suit){
+          if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+            //neither are trump and top is bigger
+            return top;
+          }else{
+            //neither are trump and other is bigger
+            return compareTo;
+          }
+        }else{
+          //neither are trump and other didn't follow suit
+          return top;
+        }
+      }
+    }
+    break;
+  case: "C":
+    if(top.suit == "C" || (top.rank == "J" && top.suit == "S")){
+      if(compareTo == "C" || (compareTo.rank == "J" && compareTo.suit == "S")){
+        if((top.rank == "J" && top.suit == "C")){
+          //top is right bower
+          return top;
+        }else if((top.rank == "J" && top.suit == "S")) {
+          if((compareTo.rank == "J" && compareTo.suit == "C")){
+            //top is left bower other is right bower
+            return compareTo;
+          }else{
+            //top is left bower other is not right bower
+            return top;
+          }
+        }else{
+          if(compareTo.rank == "J"){
+            //top is trump but not a bower other is a bower
+            return compareTo;
+          }else{
+            if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+              //both are trump neither are bowers and top is bigger
+              return top;
+            }else{
+              //both are trump neither are bowers and other is bigger
+              return compareTo;
+            }
+          }
+        }
+      }else{
+        //top is trump other is not
+        return top;
+      }
+    }else{
+      if(compareTo == "C" || (compareTo.rank == "J" && compareTo.suit == "S")){
+        //other is trump top is not
+        return compareTo;
+      }else{
+        if(compareTo.suit == top.suit){
+          if(cardLib.playingCards.compareRank(top, compareTo) > 0){
+            //neither are trump and top is bigger
+            return top;
+          }else{
+            //neither are trump and other is bigger
+            return compareTo;
+          }
+        }else{
+          //neither are trump and other didn't follow suit
+          return top;
+        }
+      }
+    }
+    break;
+}
 
 setEventHandlers();

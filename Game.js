@@ -151,6 +151,14 @@ var Game = function (gameName, numPlayers) {
   var clearCardsPlayed = function() {
       cardsPlayed = [];
     };
+
+  var incTricks = function() {
+      tricks++;
+    };
+
+  var getTricks = function() {
+      return tricks;
+    };
   
   
 
@@ -177,7 +185,7 @@ var Game = function (gameName, numPlayers) {
     , deck: deck
     , getBidRound: getBidRound
     , getCardsPlayed: getCardsPlayed
-    , tricks: tricks
+    , incTricks: incTricks
     , playerLed: playerLed
     , dealHand: dealHand
     , getFlipped: getFlipped
@@ -186,6 +194,7 @@ var Game = function (gameName, numPlayers) {
     , setTurn: setTurn
     , cardPlayed: cardPlayed
     , clearCardsPlayed: clearCardsPlayed
+    , getTricks: getTricks
   }
 };
 

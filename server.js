@@ -199,10 +199,19 @@ function turn(data){
         topCard = compareCard(topCard, cardsPlayed[i], game);
       }
       console.log(topCard);
+      game.incTricks();
       //find owner of top card
+      
+      if(game.getTricks() == 5){
+        //end of hand
+        //do scoring
+        //pass deal
+        //check if game over
+      }
     }
   } else {
-
+    //room for expansion if we add a second round of bidding
+    console.log("An error occured");
   }
   game.nextTurn();
   this.broadcast.emit('turn', {

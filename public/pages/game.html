@@ -6,31 +6,69 @@
 
 </div>
 
-<div style='border: solid 2px black; margin-left: 25%; margin-right: 25%; min-height: 600px;'>
-  <div style='background-color:#00aa00; min-height: 600px;'>
-    <div id='leftHand' class='container'></div>
-    <div id='topHand' class='container'></div>
-    <div id='rightHand' class='container'></div>
-    <div id='yourHand' class='container'>
-  </div>
-</div>
 
-
-</div>
-
-<div  class="bottom-bar navbar navbar-default navbar-fixed-bottom">
-    <div class="container-fluid" style="margin-left: 400px;">
-        <div class="status">
-            <p class="navbar-text" ng-show="status.waiting && status.waitingOn > 0">Waiting on: {{status.waitingOn}} player(s) to place tokens</p>
-            <p class="navbar-text" ng-show="won == -1 &&  yourturn != -1 && yourturn">Your Turn</p>
-            <p class="navbar-text" ng-show="won == -1 &&  yourturn != -1 && !yourturn">Opponent's Turn</p>
-            <p class="navbar-text" ng-show="won == 1">You win!</p>
-            <p class="navbar-text" ng-show="won == 0">You lose!</p>
-            <p class="navbar-text" ng-show="gameFull">This game is full!</p>
-            <button id="again_btn" class="btn btn-primary navbar-btn status-btn-right" ng-hide="won == -1" ng-click="playAgain()">Play Again?</button>
+<div class="row" style='margin-bottom: 400px;'>
+  <div class="col-xs-8">
+    <div class="game-board">
+      <div class="row">
+        <div id="topHand" class="col-xs-offset-2 col-xs-8">
+            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
         </div>
-        <div class="instructions">
-            <!--NEED TO IMPLEMENT INSTRUCTIONS -->
+      </div>
+      <div class="row">
+        <div id="leftHand" class="col-xs-2">
+            <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
         </div>
+        <div id="center" class="col-xs-8">
+          <div class="row">
+          </div>
+          <div class="row">
+          </div>
+          <div class="row">
+          </div>
+        </div>
+        <div id="rightHand" class="col-xs-2">
+          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+        </div>
+      </div>
+      <div class="row">
+        <div id="yourHand" class="col-xs-offset-2 col-xs-8">
+        </div>
+      </div>
     </div>
+    <div class="col-xs-4">
+      <!--      game data-->
+    </div>
+  </div>
+
+
+</div>
+
+<div class="bottom-bar navbar navbar-default navbar-fixed-bottom">
+  <div class="container-fluid" style="margin-left: 400px;">
+    <div class="status">
+      <p class="navbar-text" ng-show="status.waiting && status.waitingOn > 0">Waiting on: {{status.waitingOn}} player(s) to place tokens</p>
+      <p class="navbar-text" ng-show="won == -1 &&  yourturn != -1 && yourturn">Your Turn</p>
+      <p class="navbar-text" ng-show="won == -1 &&  yourturn != -1 && !yourturn">Opponent's Turn</p>
+      <p class="navbar-text" ng-show="won == 1">You win!</p>
+      <p class="navbar-text" ng-show="won == 0">You lose!</p>
+      <p class="navbar-text" ng-show="gameFull">This game is full!</p>
+      <button id="again_btn" class="btn btn-primary navbar-btn status-btn-right" ng-hide="won == -1" ng-click="playAgain()">Play Again?</button>
+    </div>
+    <div class="instructions">
+      <!--NEED TO IMPLEMENT INSTRUCTIONS -->
+    </div>
+  </div>
 </div>

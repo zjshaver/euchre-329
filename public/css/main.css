@@ -5,64 +5,65 @@ All Start Bootstrap themes are licensed under Apache 2.0.
 For more info and more free Bootstrap 3 HTML themes, visit http://startbootstrap.com!
 */
 
+
 /* Global Styles */
 
-html, body {
+html,
+body {
     font-family: 'Roboto', sans-serif;
     height: 100%;
 }
 
 .header {
-	padding: 20px 0;
-	background-color: #f44336;
+    padding: 20px 0;
+    background-color: #f44336;
     text-align: left;
     color: floralwhite;
-  
 }
 
 #wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by its height */
-  margin: 0 auto -40px;
-  /* Pad the bottom by footer height */
-  padding: 0 0 40px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by its height */
+    margin: 0 auto -40px;
+    /* Pad the bottom by footer height */
+    padding: 0 0 40px;
 }
 
+
 /* Set the fixed height of the footer here */
+
 footer {
-  height: 40px;
-  background-color: #f44336;
-  margin-top: 20px;
-  padding-top: 10px;
+    height: 40px;
+    background-color: #f44336;
+    margin-top: 20px;
+    padding-top: 10px;
     text-align: center;
     color: floralwhite;
-    
-    
     position: absolute;
     bottom: 0;
-    
     width: 100%;
 }
 
-
 .bottom-bar {
     background-color: #ef9a9a;
-   // color: floralwhite;
+    // color: floralwhite;
 }
 
 .leaflet-control-attribution {
-    display: none;   
+    display: none;
 }
 
 .status {
-    font-weight: bold   
+    font-weight: bold
 }
 
 .instructions {
-    font-style: italic   
+    font-style: italic
 }
+
+
 /*
 input[type=text] {
     padding:5px; 
@@ -76,22 +77,28 @@ input[type=text]:focus {
 }*/
 
 button[type=submit] {
-    padding:5px 15px; 
+    padding: 5px 15px;
     //background:#ccc; 
-    border:0 none;
-    cursor:pointer;
+    border: 0 none;
+    cursor: pointer;
     -webkit-border-radius: 5px;
-    border-radius: 5px; 
+    border-radius: 5px;
 }
+
 .active-offense {
-  outline: 4px solid red;
+    outline: 4px solid red;
 }
 
 .active-defense {
-  outline: 4px solid blue;
+    outline: 4px solid blue;
 }
 
 .status-btn-right {
     float: right!important;
     margin-right: 30px;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
 }

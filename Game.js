@@ -195,6 +195,8 @@ var Game = function (gameName, numPlayers) {
         , cardPlayed: cardPlayed
         , clearCardsPlayed: clearCardsPlayed
         , getTricks: getTricks
+        , flipCard: flipCard
+        , getHands: getHands
     }
 };
 

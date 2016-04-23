@@ -102,15 +102,17 @@ angular.module('myApp')
         }
 
         // Display hand
-        console.log(data.hands);
-        hand = [];
-        for (var i = 0; i < data.hands[playerId].length; i++) {
-          hand.push($.extend(new playingCards.card(), data.hands[playerId][i]));
+        if (data.bidRound == 0) {
+          console.log(data.hands);
+          hand = [];
+          for (var i = 0; i < data.hands[playerId].length; i++) {
+            hand.push($.extend(new playingCards.card(), data.hands[playerId][i]));
+          }
+          console.log(hand);
+          showHand(hand);
+          var fc = $.extend(new playingCards.card(), data.flippedCard);
+          showFC(fc);
         }
-        console.log(hand);
-        showHand(hand);
-        var fc = $.extend(new playingCards.card(), data.flippedCard);
-        showFC(fc);
 
         if (turn == playerId) {
           $scope.yourturn = true;
@@ -188,12 +190,14 @@ angular.module('myApp')
       $scope.bidding = 0;
     };
 
-    $scope.playCard = function () {
+    $scope.playCard = function (card) {
       //TODO validate card choice and send to server
+      console.log("playingCard");
+
       socket.emit("turn", {
         name: $scope.gameName
-        , round: 0
-        , order: true
+        , round: 1
+        , order: false
         , playerId: playerId
         , cardPlayed: null //CHANGE THIS
       });

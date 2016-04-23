@@ -145,6 +145,7 @@ function playerReady(data) {
                 , bidRound: game.getBidRound()
                 , hands: game.getHands()
                 , flippedCard: game.getFlipped()
+                , trump: game.getTrump()
             });
 
             this.emit('turn', {
@@ -153,6 +154,7 @@ function playerReady(data) {
                 , bidRound: game.getBidRound()
                 , hands: game.getHands()
                 , flippedCard: game.getFlipped()
+                , trump: game.getTrump()
             });
         }
 
@@ -184,6 +186,7 @@ function turn(data) {
                 game.incDealer();
                 game.dealHands();
                 game.flipCard();
+                game.setTrump("none", 0);
                 game.nextTurn();
             } else {
                 //Pass and not dealer -- do nothing

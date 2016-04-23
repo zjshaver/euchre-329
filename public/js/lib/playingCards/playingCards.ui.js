@@ -4,17 +4,18 @@
 /**
  * playingCards.ui is a UI utility library extension of the playingCard.js library
  * This contains methods to render the cards and apply effects.
- * 
+ *
  * @requires playingCards.js
  * @requires playingCards.ui.css
- * 
+ *
  * @author Copyright (c) 2010 Adam Eivy (antic | atomantic)
  * @license Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
 
- (function($,window,document,undefined) {    
+
+ (function($,window,document,undefined) {
 
     if ($.fn) {
          // we can use library methods
@@ -39,7 +40,7 @@
     };
     /**
      * generate (and cache) html for the card
-     * 
+     *
      * @return string The HTML block to show the card
      */
     playingCards.card.prototype.getHTML = function() {
@@ -77,6 +78,7 @@
         this.html = strBuild.join('');
         return this.html;
     };
+
     /**
       * build the middle of the playing card HTML
      *

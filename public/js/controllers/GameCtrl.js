@@ -21,6 +21,7 @@ angular.module('myApp')
     $scope.gameFull = false;
     $scope.ready = false;
     $scope.leavingPlayer = -1;
+    $scope.bidding = 0;
 
     var turn = -1;
 
@@ -94,6 +95,12 @@ angular.module('myApp')
         console.log("turn " + data.turn + " id " + playerId);
         turn = data.turn;
 
+        if (data.trump != "none") {
+          $scope.currentTrump = data.trump;
+        } else {
+          $scope.currentTrump = "";
+        }
+
         // Display hand
         console.log(data.hands);
         hand = [];
@@ -103,15 +110,17 @@ angular.module('myApp')
         console.log(hand);
         showHand(hand);
         var fc = $.extend(new playingCards.card(), data.flippedCard);
+        showFC(fc);
 
         if (turn == playerId) {
           $scope.yourturn = true;
           $scope.round = data.bidRound;
           if (data.bidRound == 0) {
             console.log("bidding");
-            //Display bidding options
+            $scope.bidding = 1;
           } else {
             console.log("playing hand");
+            $scope.bidding = 0;
             //Display play options
           }
         } else {
@@ -151,6 +160,14 @@ angular.module('myApp')
       }
     };
 
+    var showFC = function (fc) {
+      var e1 = $('#drawCard');
+      e1.html('');
+      console.log(fc);
+      e1.append(fc.getHTML());
+    };
+
+
     $scope.pass = function () {
       socket.emit("turn", {
         name: $scope.gameName
@@ -158,6 +175,7 @@ angular.module('myApp')
         , order: false
         , playerId: playerId
       });
+      $scope.bidding = 0;
     };
 
     $scope.order = function () {
@@ -167,6 +185,7 @@ angular.module('myApp')
         , order: true
         , playerId: playerId
       });
+      $scope.bidding = 0;
     };
 
     $scope.playCard = function () {

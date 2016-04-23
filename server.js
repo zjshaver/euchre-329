@@ -222,6 +222,7 @@ function turn(data) {
         , bidRound: game.getBidRound()
         , hands: game.getHands()
         , flippedCard: game.getFlipped()
+        , trump: game.getTrump()
     });
     this.emit('turn', {
         name: game.getName()
@@ -229,6 +230,7 @@ function turn(data) {
         , bidRound: game.getBidRound()
         , hands: game.getHands()
         , flippedCard: game.getFlipped()
+        , trump: game.getTrump()
     });
 }
 

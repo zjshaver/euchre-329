@@ -191,14 +191,21 @@ function turn(data) {
             }
         }
     } else if (data.round == 1) {
-        game.cardPlayed(data.cardPlayed);
-        recentCard = data.cardPlayed;
+        //console.log(data.cardPlayed.rank);
+        //console.log(data.cardPlayed.rankString);
+        //console.log(data.cardPlayed.suit);
+        //console.log(data.cardPlayed.suitString);
+        //console.log(data.cardPlayed.conf);
+        recentCard = new cardLib.playingCards.card(data.cardPlayed.rank, data.cardPlayed.rankString, data.cardPlayed.suit, data.cardPlayed.suitString, data.cardPlayed.conf);
+        game.cardPlayed(recentCard);
+
         if (game.getCardsPlayed().length == 1) {
-            game.setCardLed(data.cardPlayed);
+            game.setCardLed(recentCard);
         }
         if (game.getCardsPlayed().length == 4) {
             var cardsPlayed = game.getCardsPlayed();
             var topCard = cardsPlayed[0];
+            console.log(topCard);
             for (var i = 1; i < 4; i++) {
                 topCard = compareCard(topCard, cardsPlayed[i], game);
             }
@@ -256,9 +263,9 @@ function game_end(data) {
 function compareCard(top, compareTo, game) {
     //return the highest value of the two cards
     switch (game.getTrump()) {
-    case "S":
+    case "Spades":
         if (top.suit == "S" || (top.rank == "J" && top.suit == "C")) {
-            if (compareTo == "S" || (compareTo.rank == "J" && compareTo.suit == "C")) {
+            if (compareTo.suit == "S" || (compareTo.rank == "J" && compareTo.suit == "C")) {
                 if ((top.rank == "J" && top.suit == "S")) {
                     //top is right bower
                     return top;
@@ -275,7 +282,7 @@ function compareCard(top, compareTo, game) {
                         //top is trump but not a bower other is a bower
                         return compareTo;
                     } else {
-                        if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                        if (compareStandard(top, compareTo) > 0) {
                             //both are trump neither are bowers and top is bigger
                             return top;
                         } else {
@@ -289,12 +296,12 @@ function compareCard(top, compareTo, game) {
                 return top;
             }
         } else {
-            if (compareTo == "S" || (compareTo.rank == "J" && compareTo.suit == "C")) {
+            if (compareTo.suit == "S" || (compareTo.rank == "J" && compareTo.suit == "C")) {
                 //other is trump top is not
                 return compareTo;
             } else {
                 if (compareTo.suit == top.suit) {
-                    if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                    if (compareStandard(top, compareTo) > 0) {
                         //neither are trump and top is bigger
                         return top;
                     } else {
@@ -308,9 +315,9 @@ function compareCard(top, compareTo, game) {
             }
         }
         break;
-    case "D":
+    case "Diamonds":
         if (top.suit == "D" || (top.rank == "J" && top.suit == "H")) {
-            if (compareTo == "D" || (compareTo.rank == "J" && compareTo.suit == "H")) {
+            if (compareTo.suit == "D" || (compareTo.rank == "J" && compareTo.suit == "H")) {
                 if ((top.rank == "J" && top.suit == "D")) {
                     //top is right bower
                     return top;
@@ -327,7 +334,7 @@ function compareCard(top, compareTo, game) {
                         //top is trump but not a bower other is a bower
                         return compareTo;
                     } else {
-                        if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                        if (compareStandard(top, compareTo) > 0) {
                             //both are trump neither are bowers and top is bigger
                             return top;
                         } else {
@@ -341,12 +348,12 @@ function compareCard(top, compareTo, game) {
                 return top;
             }
         } else {
-            if (compareTo == "D" || (compareTo.rank == "J" && compareTo.suit == "H")) {
+            if (compareTo.suit == "D" || (compareTo.rank == "J" && compareTo.suit == "H")) {
                 //other is trump top is not
                 return compareTo;
             } else {
                 if (compareTo.suit == top.suit) {
-                    if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                    if (compareStandard(top, compareTo) > 0) {
                         //neither are trump and top is bigger
                         return top;
                     } else {
@@ -360,9 +367,9 @@ function compareCard(top, compareTo, game) {
             }
         }
         break;
-    case "H":
+    case "Hearts":
         if (top.suit == "H" || (top.rank == "J" && top.suit == "D")) {
-            if (compareTo == "H" || (compareTo.rank == "J" && compareTo.suit == "D")) {
+            if (compareTo.suit == "H" || (compareTo.rank == "J" && compareTo.suit == "D")) {
                 if ((top.rank == "J" && top.suit == "H")) {
                     //top is right bower
                     return top;
@@ -379,7 +386,7 @@ function compareCard(top, compareTo, game) {
                         //top is trump but not a bower other is a bower
                         return compareTo;
                     } else {
-                        if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                        if (compareStandard(top, compareTo) > 0) {
                             //both are trump neither are bowers and top is bigger
                             return top;
                         } else {
@@ -393,12 +400,12 @@ function compareCard(top, compareTo, game) {
                 return top;
             }
         } else {
-            if (compareTo == "H" || (compareTo.rank == "J" && compareTo.suit == "D")) {
+            if (compareTo.suit == "H" || (compareTo.rank == "J" && compareTo.suit == "D")) {
                 //other is trump top is not
                 return compareTo;
             } else {
                 if (compareTo.suit == top.suit) {
-                    if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                    if (compareStandard(top, compareTo) > 0) {
                         //neither are trump and top is bigger
                         return top;
                     } else {
@@ -412,9 +419,9 @@ function compareCard(top, compareTo, game) {
             }
         }
         break;
-    case "C":
+    case "Clubs":
         if (top.suit == "C" || (top.rank == "J" && top.suit == "S")) {
-            if (compareTo == "C" || (compareTo.rank == "J" && compareTo.suit == "S")) {
+            if (compareTo.suit == "C" || (compareTo.rank == "J" && compareTo.suit == "S")) {
                 if ((top.rank == "J" && top.suit == "C")) {
                     //top is right bower
                     return top;
@@ -431,7 +438,7 @@ function compareCard(top, compareTo, game) {
                         //top is trump but not a bower other is a bower
                         return compareTo;
                     } else {
-                        if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                        if (compareStandard(top, compareTo) > 0) {
                             //both are trump neither are bowers and top is bigger
                             return top;
                         } else {
@@ -445,12 +452,12 @@ function compareCard(top, compareTo, game) {
                 return top;
             }
         } else {
-            if (compareTo == "C" || (compareTo.rank == "J" && compareTo.suit == "S")) {
+            if (compareTo.suit == "C" || (compareTo.rank == "J" && compareTo.suit == "S")) {
                 //other is trump top is not
                 return compareTo;
             } else {
                 if (compareTo.suit == top.suit) {
-                    if (cardLib.playingCards.compareRank(top, compareTo) > 0) {
+                    if (compareStandard(top, compareTo) > 0) {
                         //neither are trump and top is bigger
                         return top;
                     } else {
@@ -465,6 +472,32 @@ function compareCard(top, compareTo, game) {
         }
         break;
     }
+}
+
+/**
+ * Compare functions
+ */
+function compareStandard(a, b) {
+    var intRegex = /^\d+$/;
+
+    if (a.rank == b.rank)                       return 0;
+    if (a.rank == "N")                          return 1;
+    if (b.rank == "N")                          return -1;
+    if (a.rank == "A")                          return 1;
+    if (b.rank == "A")                          return -1;
+    if (!isNaN(a.rank - b.rank))                return a.rank - b.rank;
+    if (a.rank == "K" && b.rank == "J")         return 1;
+    if (a.rank == "J" && b.rank == "K")         return -1;
+    if (a.rank == "K" && b.rank == "Q")         return 1;
+    if (a.rank == "Q" && b.rank == "K")         return -1;
+    if (a.rank == "Q" && b.rank == "J")         return 1;
+    if (a.rank == "J" && b.rank == "Q")         return -1;
+    if (a.rank == "K" && intRegex.test(b.rank)) return 1;
+    if (a.rank == "Q" && intRegex.test(b.rank)) return 1;
+    if (a.rank == "J" && intRegex.test(b.rank)) return 1;
+    if (intRegex.test(a.rank) && b.rank == "K") return -1;
+    if (intRegex.test(a.rank) && b.rank == "Q") return -1;
+    if (intRegex.test(a.rank) && b.rank == "J") return -1;
 }
 
 setEventHandlers();

@@ -2,11 +2,50 @@ angular.module('myApp')
 
 .controller('GameCtrl', function ($scope, $location, gameData) {
 
+  var hand = [];
+
+  var showHand = function (hand) {
+    var e1 = $('#yourHand');
+    e1.html('');
+    for (var i = 0; i < hand.length; i++) {
+      console.log(hand[i]);
+      e1.append(hand[i].getHTML());
+    }
+  };
+
+  playCard = function (card) {
+    //TODO validate card choice and send to server
+    console.log("playingCard");
+
+    var res = (card.id).split(',');
+    for (var i = 0; i < hand.length; i++) {
+      if (hand[i].rank == res[0] && hand[i].suit == res[1]) {
+        console.log(i);
+        var temp = hand[i];
+        for (var j = i; j < hand.length-1; j++) {
+          hand[j] = hand[j+1];
+        }
+        hand[hand.length-1] = temp;
+        hand.pop()
+        break;
+      }
+    }
+    showHand(hand);
+    //TODO: Set up the following emit of turn
+    /*socket.emit("turn", {
+      name: $scope.gameName
+      , round: 1
+      , order: false
+      , playerId: playerId
+      , cardPlayed: null //CHANGE THIS
+    });*/
+
+  };
+
   angular.element(document).ready(function () {
     var socket = io.connect();
 
     var gameInfo = {};
-    var hand = [];
 
     $scope.stats = [];
     $scope.gameName = "";
@@ -153,14 +192,14 @@ angular.module('myApp')
       }
     });
 
-    var showHand = function (hand) {
+    /*var showHand = function (hand) {
       var e1 = $('#yourHand');
       e1.html('');
       for (var i = 0; i < hand.length; i++) {
         console.log(hand[i]);
         e1.append(hand[i].getHTML());
       }
-    };
+    };*/
 
     var showFC = function (fc) {
       var e1 = $('#drawCard');
@@ -188,19 +227,6 @@ angular.module('myApp')
         , playerId: playerId
       });
       $scope.bidding = 0;
-    };
-
-    $scope.playCard = function (card) {
-      //TODO validate card choice and send to server
-      console.log("playingCard");
-
-      socket.emit("turn", {
-        name: $scope.gameName
-        , round: 1
-        , order: false
-        , playerId: playerId
-        , cardPlayed: null //CHANGE THIS
-      });
     };
 
   });

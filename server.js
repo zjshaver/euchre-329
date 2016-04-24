@@ -173,6 +173,7 @@ function playerReady(data) {
 function turn(data) {
     game = games[data.name];
     recentCard = "none";
+    var trickWinner = "none";
     if (data.round == 0) {
         if (data.order == true) {
             game.setTrump(game.getFlipped().suitString, data.playerId % 2);
@@ -191,11 +192,6 @@ function turn(data) {
             }
         }
     } else if (data.round == 1) {
-        //console.log(data.cardPlayed.rank);
-        //console.log(data.cardPlayed.rankString);
-        //console.log(data.cardPlayed.suit);
-        //console.log(data.cardPlayed.suitString);
-        //console.log(data.cardPlayed.conf);
         recentCard = new cardLib.playingCards.card(data.cardPlayed.rank, data.cardPlayed.rankString, data.cardPlayed.suit, data.cardPlayed.suitString, data.cardPlayed.conf);
         game.cardPlayed(recentCard);
 
@@ -205,13 +201,40 @@ function turn(data) {
         if (game.getCardsPlayed().length == 4) {
             var cardsPlayed = game.getCardsPlayed();
             var topCard = cardsPlayed[0];
-            console.log(topCard);
+            //console.log(topCard);
             for (var i = 1; i < 4; i++) {
                 topCard = compareCard(topCard, cardsPlayed[i], game);
             }
             console.log(topCard);
             game.incTricks();
+
             //find owner of top card
+            var c;
+            var order = 0;
+            for (var j = 0; j < cardsPlayed.length; j++) {
+              c = cardsPlayed[j];
+              if (c.rank == topCard.rank && c.suit == topCard.suit) {
+                order = j;
+                break;
+              }
+            }
+            var index = 0;
+            if (order == 0) {
+              index = (game.getDealer() + 1) % 4;
+              game.getPlayer(index).winTrick();
+            } else if (order == 1) {
+              index = (game.getDealer() + 2) % 4;
+              game.getPlayer(index).winTrick();
+            } else if (order == 2) {
+              index = (game.getDealer() + 3) % 4;
+              game.getPlayer(index).winTrick();
+            } else if (order == 3) {
+              index = game.playerId;
+              game.getPlayer(index).winTrick();
+            }
+            trickWinner = index;
+            console.log("Player: "+index+" wins trick!");
+            game.setTurn(trickWinner-1); // The -1 is only because turn is automatically incremented below
 
             if (game.getTricks() == 5) {
                 //end of hand
@@ -234,6 +257,7 @@ function turn(data) {
         , trump: game.getTrump()
         , recentCard: recentCard
         , playedBy: data.playerId
+        , trickWinner: trickWinner
     });
     this.emit('turn', {
         name: game.getName()
@@ -244,6 +268,7 @@ function turn(data) {
         , trump: game.getTrump()
         , recentCard: recentCard
         , playedBy: data.playerId
+        , trickWinner: trickWinner
     });
 }
 

@@ -153,6 +153,12 @@ angular.module('myApp')
           showHand(hand);
           var fc = $.extend(new playingCards.card(), data.flippedCard);
           showFC(fc);
+
+          // Reset trick count for current hand
+          $scope.yourTricks = 0;
+          $scope.partnersTricks = 0;
+          $scope.opp1Tricks = 0;
+          $scope.opp2Tricks = 0;
         } else {
           // Place played cards appropriatly on table
           if (data.recentCard != "none") {
@@ -207,6 +213,51 @@ angular.module('myApp')
               }
             }
           }
+
+          if (data.trickWinner != "none") {
+            // Update tricks taken
+            if (data.trickWinner == playerId) {
+              $scope.yourTricks++;
+            } else if ((data.trickWinner%2) == (playerId%2)) {
+              $scope.partnersTricks++;
+            } else if (playerId == 0) {
+              if (data.trickWinner == 1) {
+                $scope.opp1Tricks++;
+              } else if (data.trickWinner == 3) {
+                $scope.opp2Tricks++;
+              }
+            } else if (playerId == 1) {
+              if (data.trickWinner == 0) {
+                $scope.opp2Tricks++;
+              } else if (data.trickWinner == 2) {
+                $scope.opp1Tricks++;
+              }
+            } else if (playerId == 2) {
+              if (data.trickWinner == 1) {
+                $scope.opp2Tricks++;
+              } else if (data.trickWinner == 3) {
+                $scope.opp1Tricks++;
+              }
+            } else if (playerId == 3) {
+              if (data.trickWinner == 0) {
+                $scope.opp1Tricks++;
+              } else if (data.trickWinner == 2) {
+                $scope.opp2Tricks++;
+              }
+            }
+            // Clear the table
+            var myC = $('#mycard');
+            var oppC = $('#oppositecard');
+            var lC = $('#leftcard');
+            var rC = $('#rightcard');
+            
+            // DO NOT DO THE FOLLOWING IT BLOWS AWAY FORMATING OF POSITION!!!
+            //myC.html('');
+            //oppC.html('');
+            //lC.html('');
+            //rC.html('');
+          }
+
         }
 
         if (turn == playerId) {

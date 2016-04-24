@@ -49,6 +49,10 @@ var Game = function (gameName, numPlayers) {
         full = playerCount == numOfPlayers;
     };
 
+    var getPlayer = function (id) {
+      return players[id];
+    }
+
     var nextTurn = function () {
         turn++;
     };
@@ -168,6 +172,7 @@ var Game = function (gameName, numPlayers) {
         , getCount: getCount
         , getName: getName
         , addPlayer: addPlayer
+        , getPlayer: getPlayer
         , isFull: isFull
         , players: players
         , getNumPlayers: getNumPlayers

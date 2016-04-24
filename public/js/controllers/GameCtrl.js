@@ -1,8 +1,10 @@
 angular.module('myApp')
 
 .controller('GameCtrl', function ($scope, $location, gameData) {
-
+  var socket = io.connect();
   var hand = [];
+  var playerId = -1;
+  var turn = -1;
 
   var showHand = function (hand) {
     var e1 = $('#yourHand');
@@ -15,41 +17,42 @@ angular.module('myApp')
 
   playCard = function (card) {
     //TODO validate card choice and send to server
-    console.log("playingCard");
 
-    var res = (card.id).split(',');
-    for (var i = 0; i < hand.length; i++) {
-      if (hand[i].rank == res[0] && hand[i].suit == res[1]) {
-        console.log(i);
-        var temp = hand[i];
-        for (var j = i; j < hand.length-1; j++) {
-          hand[j] = hand[j+1];
+    if (turn == playerId) {
+      console.log("playingCard");
+
+      var res = (card.id).split(',');
+      for (var i = 0; i < hand.length; i++) {
+        if (hand[i].rank == res[0] && hand[i].suit == res[1]) {
+          //console.log(i);
+          var temp = hand[i];
+          for (var j = i; j < hand.length-1; j++) {
+            hand[j] = hand[j+1];
+          }
+          hand[hand.length-1] = temp;
+          hand.pop()
+          break;
         }
-        hand[hand.length-1] = temp;
-        hand.pop()
-        break;
       }
-    }
-    showHand(hand);
-    //TODO: Set up the following emit of turn
-    /*socket.emit("turn", {
-      name: $scope.gameName
-      , round: 1
-      , order: false
-      , playerId: playerId
-      , cardPlayed: null //CHANGE THIS
-    });*/
+      showHand(hand);
 
+      socket.emit("turn", {
+        name: $scope.gameName
+        , round: 1
+        , order: false
+        , playerId: playerId
+        , cardPlayed: temp
+      });
+
+    }
   };
 
   angular.element(document).ready(function () {
-    var socket = io.connect();
 
     var gameInfo = {};
 
     $scope.stats = [];
     $scope.gameName = "";
-    var playerId = -1;
 
     $scope.status = {
       waiting: false
@@ -62,7 +65,6 @@ angular.module('myApp')
     $scope.leavingPlayer = -1;
     $scope.bidding = 0;
 
-    var turn = -1;
 
     //if game wasn't created or joined go to game menu
     if (gameData.getJoinName() == "" && !gameData.isCreated()) {
@@ -151,6 +153,60 @@ angular.module('myApp')
           showHand(hand);
           var fc = $.extend(new playingCards.card(), data.flippedCard);
           showFC(fc);
+        } else {
+          // Place played cards appropriatly on table
+          if (data.recentCard != "none") {
+            var rc = $.extend(new playingCards.card(), data.recentCard);
+            if (playerId == data.playedBy) {
+              var e1 = $('#mycard');
+              e1.html('');
+              e1.append(rc.getHTML());
+            } else if (data.playedBy % 2 == playerId % 2) {
+              var e1 = $('#oppositecard');
+              e1.html('');
+              e1.append(rc.getHTML());
+            } else if (playerId == 0) {
+              if (data.playedBy == 1) {
+                var e1 = $('#leftcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              } else if (data.playedBy == 3) {
+                var e1 = $('#rightcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              }
+            } else if (playerId == 1) {
+              if (data.playedBy == 0) {
+                var e1 = $('#rightcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              } else if (data.playedBy == 2) {
+                var e1 = $('#leftcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              }
+            } else if (playerId == 2) {
+              if (data.playedBy == 1) {
+                var e1 = $('#rightcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              } else if (data.playedBy == 3) {
+                var e1 = $('#leftcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              }
+            } else if (playerId == 3) {
+              if (data.playedBy == 0) {
+                var e1 = $('#leftcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              } else if (data.playedBy == 2) {
+                var e1 = $('#rightcard');
+                e1.html('');
+                e1.append(rc.getHTML());
+              }
+            }
+          }
         }
 
         if (turn == playerId) {

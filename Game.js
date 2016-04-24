@@ -22,7 +22,7 @@ var Game = function (gameName, numPlayers) {
         , hands = []
         , fc = null;
 
-    // Getters and setters  
+    // Getters and setters
     var getNumPlayers = function () {
         return numOfPlayers;
     };
@@ -181,6 +181,7 @@ var Game = function (gameName, numPlayers) {
         , team1Scores: team1Scores
         , team2Scores: team2Scores
         , getPlayerCount: getPlayerCount
+        , setCardLed: setCardLed
         , getCardLed: getCardLed
         , deck: deck
         , getBidRound: getBidRound

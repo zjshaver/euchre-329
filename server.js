@@ -121,9 +121,6 @@ function joinRequest(data) {
     }
 }
 
-
-
-// TODO: Decide if we need a ready function and if so uncomment line 50
 function playerReady(data) {
     game = games[data.name];
     console.log(data);
@@ -175,6 +172,7 @@ function playerReady(data) {
 
 function turn(data) {
     game = games[data.name];
+    recentCard = "none";
     if (data.round == 0) {
         if (data.order == true) {
             game.setTrump(game.getFlipped().suitString, data.playerId % 2);
@@ -193,7 +191,8 @@ function turn(data) {
             }
         }
     } else if (data.round == 1) {
-        game.playCard(data.cardPlayed);
+        game.cardPlayed(data.cardPlayed);
+        recentCard = data.cardPlayed;
         if (game.getCardsPlayed().length == 1) {
             game.setCardLed(data.cardPlayed);
         }
@@ -226,6 +225,8 @@ function turn(data) {
         , hands: game.getHands()
         , flippedCard: game.getFlipped()
         , trump: game.getTrump()
+        , recentCard: recentCard
+        , playedBy: data.playerId
     });
     this.emit('turn', {
         name: game.getName()
@@ -234,6 +235,8 @@ function turn(data) {
         , hands: game.getHands()
         , flippedCard: game.getFlipped()
         , trump: game.getTrump()
+        , recentCard: recentCard
+        , playedBy: data.playerId
     });
 }
 

@@ -196,6 +196,7 @@ var Game = function (gameName, numPlayers) {
         , dealHands: dealHands
         , getFlipped: getFlipped
         , getDealer: getDealer
+        , incDealer: incDealer
         , setRound: setRound
         , setTurn: setTurn
         , cardPlayed: cardPlayed

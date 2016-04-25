@@ -229,7 +229,7 @@ function turn(data) {
               index = (game.getDealer() + 3) % 4;
               game.getPlayer(index).winTrick();
             } else if (order == 3) {
-              index = game.playerId;
+              index = game.getDealer();
               game.getPlayer(index).winTrick();
             }
             trickWinner = index;
@@ -238,8 +238,38 @@ function turn(data) {
 
             if (game.getTricks() == 5) {
                 //end of hand
-                //do scoring
+                if(game.whoSetTrump() % 2 == 0){
+                  //team 1 set trump
+                  if(game.getPlayer(0).getTricks() + game.getPlayer(2).getTricks() < 3){
+                    //team 1 euchred
+                    game.team1Euchred();
+                  }else if(game.getPlayer(0).getTricks() + game.getPlayer(2).getTricks() == 5){
+                    //team 1 marched
+                    game.team1Scores();
+                    game.team1Scores();
+                  }else{
+                    game.team1Scores();
+                  }
+                }else{
+                  //team 2 set trump
+                  if(game.getPlayer(1).getTricks() + game.getPlayer(3).getTricks() < 3){
+                    //team 1 euchred
+                    game.team2Euchred();
+                  }else if(game.getPlayer(3).getTricks() + game.getPlayer(1).getTricks() == 5){
+                    //team 1 marched
+                    game.team2Scores();
+                    game.team2Scores();
+                  }else{
+                    game.team2Scores();
+                  }
+                }
                 //pass deal
+                game.setTurn(game.getDealer());
+                game.incDealer();
+                game.dealHands();
+                game.flipCard();
+                game.setTrump("none", 0);
+                game.setRound(0);
                 //check if game over
             }
         }

@@ -26,10 +26,10 @@ angular.module('myApp')
         if (hand[i].rank == res[0] && hand[i].suit == res[1]) {
           //console.log(i);
           var temp = hand[i];
-          for (var j = i; j < hand.length-1; j++) {
-            hand[j] = hand[j+1];
+          for (var j = i; j < hand.length - 1; j++) {
+            hand[j] = hand[j + 1];
           }
-          hand[hand.length-1] = temp;
+          hand[hand.length - 1] = temp;
           hand.pop()
           break;
         }
@@ -64,6 +64,10 @@ angular.module('myApp')
     $scope.ready = false;
     $scope.leavingPlayer = -1;
     $scope.bidding = 0;
+    $scope.player1CardsPlayed = 5;
+    $scope.player2CardsPlayed = 5;
+    $scope.player3CardsPlayed = 5;
+
 
 
     //if game wasn't created or joined go to game menu
@@ -169,45 +173,54 @@ angular.module('myApp')
               e1.append(rc.getHTML());
             } else if (data.playedBy % 2 == playerId % 2) {
               var e1 = $('#oppositecard');
+              $scope.player2CardsPlayed--;
               e1.html('');
               e1.append(rc.getHTML());
             } else if (playerId == 0) {
               if (data.playedBy == 1) {
                 var e1 = $('#leftcard');
+                $scope.player1CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               } else if (data.playedBy == 3) {
                 var e1 = $('#rightcard');
+                $scope.player3CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               }
             } else if (playerId == 1) {
               if (data.playedBy == 0) {
                 var e1 = $('#rightcard');
+                $scope.player3CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               } else if (data.playedBy == 2) {
                 var e1 = $('#leftcard');
+                $scope.player1CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               }
             } else if (playerId == 2) {
               if (data.playedBy == 1) {
                 var e1 = $('#rightcard');
+                $scope.player3CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               } else if (data.playedBy == 3) {
                 var e1 = $('#leftcard');
+                $scope.player1CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               }
             } else if (playerId == 3) {
               if (data.playedBy == 0) {
                 var e1 = $('#leftcard');
+                $scope.player1CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               } else if (data.playedBy == 2) {
                 var e1 = $('#rightcard');
+                $scope.player3CardsPlayed--;
                 e1.html('');
                 e1.append(rc.getHTML());
               }
@@ -218,7 +231,7 @@ angular.module('myApp')
             // Update tricks taken
             if (data.trickWinner == playerId) {
               $scope.yourTricks++;
-            } else if ((data.trickWinner%2) == (playerId%2)) {
+            } else if ((data.trickWinner % 2) == (playerId % 2)) {
               $scope.partnersTricks++;
             } else if (playerId == 0) {
               if (data.trickWinner == 1) {
@@ -250,7 +263,7 @@ angular.module('myApp')
             var oppC = $('#oppositecard');
             var lC = $('#leftcard');
             var rC = $('#rightcard');
-            
+
             // DO NOT DO THE FOLLOWING IT BLOWS AWAY FORMATING OF POSITION!!!
             //myC.html('');
             //oppC.html('');

@@ -100,3 +100,24 @@ button[type=submit] {
   padding-bottom: 20px;
   background-color: #00e64d;
 }
+
+.card-place-vertical {
+  width: 76px;
+  height: 100px;
+  border-style: solid;
+  border-width: 5px;
+  border-color: white;
+  border-radius: 5px;
+  display: inline-block;
+  margin-right: 2px;
+}
+
+.card-place-horizontal {
+  width: 100px;
+  height: 76px;
+  border-style: solid;
+  border-width: 5px;
+  border-color: white;
+  border-radius: 5px;
+  margin-bottom: 2px;
+}

@@ -13,59 +13,86 @@
       <div class="row">
         <div id="topHand" class="col-xs-12 text-center">
           <p>Teammate</p>
-          <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-          <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-          <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-          <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-          <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+          <div ng-show="status.waiting && status.waitingOn > 0">
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+          </div>
+          <div ng-hide="status.waiting && status.waitingOn > 0">
+            <img ng-show="player2CardsPlayed > 0" src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img ng-show="player2CardsPlayed > 1" src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img ng-show="player2CardsPlayed > 2" src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img ng-show="player2CardsPlayed > 3" src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <img ng-show="player2CardsPlayed > 4" src="../img/back-of-card.png" style="width:76px;height:100px;">
+          </div>
         </div>
       </div>
       <div class="row">
         <div id="leftHand" class="col-xs-2 text-left">
           <p>Opponent1</p>
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <div ng-show="status.waiting && status.waitingOn > 0">
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+          </div>
+          <div ng-hide="status.waiting && status.waitingOn > 0">
+            <img ng-show="player1CardsPlayed > 0" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player1CardsPlayed > 1" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player1CardsPlayed > 2" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player1CardsPlayed > 3" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player1CardsPlayed > 4" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          </div>
         </div>
         <div id="center" class="col-xs-offset-1 col-xs-6" style="padding-top: 50px;">
           <div class="row">
-            <div id="oppositecard" class="col-xs-offset-4 col-xs-4">
-              <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <div id="oppositecard" class="col-xs-offset-5 col-xs-4">
+              <div class="card-place-vertical pull-center"></div>
             </div>
           </div>
           <div class="row">
-            <div id="leftcard" class="col-xs-4">
-              <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <div id="leftcard" class="col-xs-offset-1 col-xs-3">
+              <div class="card-place-vertical"></div>
             </div>
-            <div id="rightcard" class="col-xs-offset-4 col-xs-4">
-              <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <div id="rightcard" class="col-xs-offset-5 col-xs-3">
+              <div class="card-place-vertical"></div>
             </div>
           </div>
           <div class="row">
-            <div id="mycard" class="col-xs-offset-4 col-xs-4">
-              <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <div id="mycard" class="col-xs-offset-5 col-xs-4">
+              <div class="card-place-vertical pull-center"></div>
             </div>
           </div>
         </div>
         <div id="rightHand" class="col-xs-2 pull-right">
           <p>Opponent2</p>
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
-          <img src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          <div ng-show="status.waiting && status.waitingOn > 0">
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+            <div class="card-place-horizontal"></div>
+          </div>
+          <div ng-hide="status.waiting && status.waitingOn > 0">
+            <img ng-show="player3CardsPlayed > 0" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player3CardsPlayed > 1" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player3CardsPlayed > 2" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player3CardsPlayed > 3" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+            <img ng-show="player3CardsPlayed > 4" src="../img/back-of-card-rotated.png" style="width:100px;height:76px;">
+          </div>
         </div>
       </div>
       <div class="row">
         <div id="yourHand" class="col-xs-offset-3 col-xs-6">
           <div ng-show="status.waiting && status.waitingOn > 0">
-            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-            <img src="../img/back-of-card.png" style="width:76px;height:100px;">
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
+            <div class="card-place-vertical"></div>
           </div>
         </div>
       </div>
@@ -89,8 +116,9 @@
         <p>Opponent2 tricks won: {{opp2Tricks}}</p>
       </div>
       <div>
-        <img src="../img/back-of-card.png" style="width:76px;height:100px;">
-        <div id="drawCard">draw card</div>
+        <p>Draw card:</p>
+        <img ng-show="status.waiting && status.waitingOn > 0" src="../img/back-of-card.png" style="width:76px;height:100px;">
+        <div id="drawCard"></div>
       </div>
     </div>
   </div>

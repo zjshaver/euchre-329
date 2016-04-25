@@ -264,11 +264,11 @@ angular.module('myApp')
             var lC = $('#leftcard');
             var rC = $('#rightcard');
 
-            // DO NOT DO THE FOLLOWING IT BLOWS AWAY FORMATING OF POSITION!!!
-            //myC.html('');
-            //oppC.html('');
-            //lC.html('');
-            //rC.html('');
+            myC.html('<div class="card-place-vertical pull-center"></div>');
+            rC.html('<div class="card-place-vertical"></div>');
+            lC.html('<div class="card-place-vertical"></div>');
+            oppC.html('<div class="card-place-vertical pull-center"></div>');
+
           }
 
         }

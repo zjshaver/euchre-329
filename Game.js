@@ -164,7 +164,13 @@ var Game = function (gameName, numPlayers) {
         return tricks;
     };
 
+    var setPlayerLed = function(id) {
+      playerLed = id;
+    }
 
+    var getPlayerLed = function() {
+      return playerLed;
+    }
 
     // Define which variables and methods can be accessed
     return {
@@ -204,6 +210,8 @@ var Game = function (gameName, numPlayers) {
         , getTricks: getTricks
         , flipCard: flipCard
         , getHands: getHands
+        , setPlayerLed:setPlayerLed
+        , getPlayerLed: getPlayerLed
     }
 };
 

@@ -197,6 +197,7 @@ function turn(data) {
 
         if (game.getCardsPlayed().length == 1) {
             game.setCardLed(recentCard);
+            game.setPlayerLed(data.playerId);
         }
         if (game.getCardsPlayed().length == 4) {
             var cardsPlayed = game.getCardsPlayed();
@@ -220,21 +221,22 @@ function turn(data) {
             }
             var index = 0;
             if (order == 0) {
-              index = (game.getDealer() + 1) % 4;
+              index = (game.getPlayerLed()) % 4;
               game.getPlayer(index).winTrick();
             } else if (order == 1) {
-              index = (game.getDealer() + 2) % 4;
+              index = (game.getPlayerLed() + 1) % 4;
               game.getPlayer(index).winTrick();
             } else if (order == 2) {
-              index = (game.getDealer() + 3) % 4;
+              index = (game.getPlayerLed() + 2) % 4;
               game.getPlayer(index).winTrick();
             } else if (order == 3) {
-              index = game.getDealer();
+              index = (game.getPlayerLed() + 3) % 4;
               game.getPlayer(index).winTrick();
             }
             trickWinner = index;
             console.log("Player: "+index+" wins trick!");
             game.setTurn(trickWinner-1); // The -1 is only because turn is automatically incremented below
+            game.clearCardsPlayed();
 
             if (game.getTricks() == 5) {
                 //end of hand
